@@ -14,3 +14,7 @@ data/
 # Virtual environments
 venv/
 .env
+
+
+#Test files 
+test.py
