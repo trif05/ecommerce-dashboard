@@ -31,3 +31,43 @@ print(colums_names)
 print("\nMISSING VALUES ANALYSIS")
 missing_values=df_merged.isnull().sum()
 print(missing_values)
+
+
+#COMPARE THE DATASET SIZES BEFORE/AFTER MERGE
+print("\nJOIN QUALITY METRICS")
+print(f"Original orders dataset: {df_orders.shape[0]:,} rows")
+print(f"Original items dataset: {df_items.shape[0]:,} rows") 
+print(f"Merged dataset: {df_merged.shape[0]:,} rows")
+
+# Check if any orders were lost in the merge
+orders_lost = df_orders.shape[0] - df_merged['order_id'].nunique()
+print(f"Orders lost in merge: {orders_lost}")
+
+# Check if any items were lost
+# Items in the starting dataset minus rows in merged dataset
+items_lost = df_items.shape[0] - df_merged.shape[0]
+print(f"Items lost in merge: {items_lost}")
+#===============================================================================================================
+# Revenue coverage analysis / Ανάλυση κάλυψης εσόδων
+print("BUSINESS IMPACT VALIDATION")
+# Calculate the revenue before merge
+original_revenue = df_items['price'].sum()
+# Calculate the revenue after merge
+merged_revenue = df_merged['price'].sum()
+revenue_coverage = (merged_revenue / original_revenue) * 100
+
+print(f"Original total revenue: ${original_revenue:,.2f}") # Sum of all items that sold
+print(f"Merged dataset revenue: ${merged_revenue:,.2f}") # Sum of all items that sold and were part of an order
+print(f"Revenue coverage: {revenue_coverage:.1f}%") # This shows how much of the original revenue is covered by the merged dataset
+# Customer coverage
+unique_customers_merged = df_merged['customer_id'].nunique() #Avoid counting the duplicate customers
+print(f"Unique customers in merged dataset: {unique_customers_merged:,}")
+#===============================================================================================================
+# Order complexity analysis
+print("ORDER RELATIONSHIP ANALYSIS")
+# Items per order distribution
+items_per_order = df_merged.groupby('order_id').size()
+print(f"Average items per order: {items_per_order.mean():.2f}")
+print(f"Max items in single order: {items_per_order.max()}")
+print(f"Orders with 1 item: {(items_per_order == 1).sum():,}")
+print(f"Orders with multiple items: {(items_per_order > 1).sum():,}")
