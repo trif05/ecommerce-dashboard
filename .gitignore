@@ -17,4 +17,4 @@ venv/
 
 
 #Test files 
-test.py
+notebooks/test.py

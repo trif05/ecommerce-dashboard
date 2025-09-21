@@ -71,3 +71,32 @@ print(f"Average items per order: {items_per_order.mean():.2f}")
 print(f"Max items in single order: {items_per_order.max()}")
 print(f"Orders with 1 item: {(items_per_order == 1).sum():,}")
 print(f"Orders with multiple items: {(items_per_order > 1).sum():,}")
+
+# =============================================================================
+# DATA QUALITY INVESTIGATION & REMEDIATION
+# =============================================================================
+
+print("\n" + "="*60)
+print("INVESTIGATING MISSING ORDERS")
+print("="*60)
+
+# Βρες ποιες παραγγελίες χάθηκαν
+orders_without_items = df_orders[~df_orders['order_id'].isin(df_items['order_id'])]
+print(f"Orders χωρίς items: {len(orders_without_items)}")
+
+# Ανάλυση των missing orders
+print("\nSample of missing orders:")
+print(orders_without_items[['order_id', 'order_status', 'order_purchase_timestamp']].head(10))
+
+# Τι status έχουν αυτές οι παραγγελίες;
+print("\nStatus breakdown of missing orders:")
+missing_status = orders_without_items['order_status'].value_counts()
+print(missing_status)
+
+# Ποσοστιαία κατανομή
+print("\nPercentage breakdown:")
+missing_percentage = (missing_status / len(orders_without_items)) * 100
+for status, percentage in missing_percentage.items():
+    print(f"{status}: {percentage:.1f}%")
+
+#Heree we should see next time , explain the up

@@ -98,3 +98,4 @@ for month, count in monthly_distribution.items():
 print(f"\n{'=' * 60}")
 print("DATA EXPLORATION COMPLETED!")
 print("=" * 60)
+# this code is part of the e-commerce dashboard project.
