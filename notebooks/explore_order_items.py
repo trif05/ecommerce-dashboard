@@ -4,18 +4,15 @@ import numpy as np
 # =============================================================================
 # ORDER ITEMS ANALYSIS - REVENUE & PRODUCT EXPLORATION
 # =============================================================================
-
-# =============================================================================
-# PHASE 1: DATASET LOADING & BASIC EXPLORATION
-# =============================================================================
 # (/) after english comments it means that the code is translated to greek for personal understanding.
 
 print("=" * 60)
 print("ORDER ITEMS DATASET EXPLORATION")
 print("=" * 60)
 
-# Load the order items dataset
+# Load the order items dataset / Διαβαζει το csv σε pandas dataframe
 df = pd.read_csv(r"C:\Users\Pc User\Desktop\projects\Working_On\ecommerce-dashboard\data\olist_order_items_dataset.csv")
+
 # Data shape & structure
 print(f"Total number of order items: {df.shape[0]:,}")
 print(f"Number of columns: {df.shape[1]}")
@@ -36,21 +33,14 @@ if duplicate_rows > 0:
 else:
     print("No duplicate rows found.")
 
-# Check for invalid item ids (negative or zero)
-invalid_item_ids=df[df['order_id']<0]
-if invalid_item_ids.empty:
-    print("No invalid order ids found.")
-else:
-    print(f"Invalid order ids found: {len(invalid_item_ids)}")
-    print(invalid_item_ids)
 
-#Descriptive statistics for numerical columns(price,freight_value,order_item_id)
+#Descriptive statistics for numerical columns(price,freight_value,order_item_id) / Στατιστικά περιγραφής για αριθμητικές στήλες
 stats=df[['price', 'freight_value', 'order_item_id']].describe()
 print("\nDESCRIPTIVE STATISTICS:")
 print(stats)
 
-# Unique values in order_item_id , product_id.
-# With unique order we can understand how many distinct orders and products are present.
+# Unique values in order_item_id , product_id. / Μοναδικές τιμές σε order_item_id , product_id.
+# With unique order we can understand how many distinct orders and products are present. / Με τις μοναδικές παραγγελίες μπορούμε να καταλάβουμε πόσες διαφορετικές παραγγελίες και προϊόντα υπάρχουν.
 print("\n Order Behavior:")
 unique_orders = df['order_id'].nunique()
 unique_products = df['product_id'].nunique()
@@ -66,7 +56,6 @@ print(f"Average sales per product: {product_popularity:.1f}")
 # Total revenue and average price per item /revenue = χργηματα που εισεπραξε το marketplace
 total_revenue = df['price'].sum()
 print(f"Total Revenue: {total_revenue:,}€")
-
 # Average Order Value / Mo Αξία Παραγγελίας
 aov= total_revenue / unique_orders
 print(f"Average Order Value (AOV): {aov:.2f}€")
@@ -123,7 +112,7 @@ most_expensive_shipping =df.groupby('order_id')['freight_value'].sum().sort_valu
 print("\nMOST EXPENSIVE SHIPPING COSTS:")
 print(most_expensive_shipping)
 
-# Correlation analysis / Όταν η μία μεταβλητή αυξάνεται, τι κάνει η άλλη;
+# Correlation analysis between price and freight_value
 correlation = df['price'].corr(df['freight_value']) # .corr() calculates the correlation coefficient
 print(f"\nPRICE vs FREIGHT CORRELATION: {correlation:.3f}")
 
@@ -156,9 +145,7 @@ print(seller_efficiency_clean.sort_values(ascending=False))
 outliers_description = df[['price', 'freight_value']].describe()
 print("\nOUTLIER DETECTION DESCRIPTION:")
 print(outliers_description)
-
-# Products with price > 3x mean price
-outlier_products = df[df["price"] > 3 * df["price"].mean()]
+outlier_products = df[df["price"] > 3 * df["price"].mean()]# Products with price > 3x mean price
 print("\nProducts with price > 3x mean:")
 print(outlier_products)
 
@@ -194,4 +181,4 @@ summary = {
 # Separate prints για complex analysis
 print("Simple Metrics Summary:")
 summary_df = pd.DataFrame([summary])
-print(summary_df.T)  # Transpose για καλύτερη εμφάνιση
+print(summary_df.T)  # Transpose for better readability
