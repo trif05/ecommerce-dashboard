@@ -50,6 +50,21 @@ df_merged = orders.merge(items, on="order_id", how="inner", validate="one_to_man
 df_merged.to_csv(OUT / "integrated_data.csv", index=False)
 print("DATA folder:", DATA.resolve())
 print("OUT folder:", OUT.resolve())
+#-----------ASSERTIONS SECTION-----------------------
+#Columns that must exist
+assert "order_id" in orders.columns , "orders: missing 'order_id"
+assert "order_id" in items.columns , "items: missing 'order_id"
+
+#Types that we want
+assert pd.api.types.is_string_dtype(orders["order_id"]), "orders.oreder_id must be string" # We check if the column is string
+assert isinstance(orders["order_status"].dtype, pd.CategoricalDtype) , "orders.order_status must be category"
+for c in ORDERS_PARSE_DATES:
+    assert pd.api.types.is_datetime64_any_dtype(orders[c]) , f"orders.{c} must be datetime"
+for c in ITEMS_PARSE_DATES:
+    assert pd.api.types.is_datetime64_any_dtype(items[c]), f"items.{c} must be datetime"
+
+# Unique order ids
+assert orders["order_id"].is_unique, "orders: order_id must be unique"
 
 # Shape of the merged dataset
 rows = df_merged.shape[0]
