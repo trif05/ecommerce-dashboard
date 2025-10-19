@@ -132,7 +132,7 @@ print("\n" + "="*60)
 print("INVESTIGATING MISSING ORDERS")
 print("="*60)
 
-# Βρες ποιες παραγγελίες χάθηκαν
+# Find which orders have been lost
 orders_without_items = orders[~orders['order_id'].isin(items['order_id'])]
 print(f"Orders χωρίς items: {len(orders_without_items)}")
 
@@ -150,3 +150,12 @@ print("\nPercentage breakdown:")
 missing_percentage = (missing_status / len(orders_without_items)) * 100
 for status, percentage in missing_percentage.items():
     print(f"{status}: {percentage:.1f}%")
+
+#Time features for order purchase timestamp
+print("\nTime features for order purchase timestamp:")
+df_merged['order_purchase_timestamp'] =pd.to_datetime(df_merged['order_purchase_timestamp'],errors='coerce') #Converts string ->datetime64/if something cant be convert set as NaT
+df_merged['order_year']=df_merged['order_purchase_timestamp'].dt.year
+df_merged['order_month']=df_merged['order_purchase_timestamp'].dt.month
+df_merged['order_weekday']=df_merged['order_purchase_timestamp'].dt.weekday
+df_merged['order_hour']=df_merged['order_purchase_timestamp'].dt.hour
+print(df_merged[['order_purchase_timestamp','order_year','order_month','order_weekday','order_hour']].head())
