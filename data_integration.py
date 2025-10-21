@@ -159,3 +159,22 @@ df_merged['order_month']=df_merged['order_purchase_timestamp'].dt.month
 df_merged['order_weekday']=df_merged['order_purchase_timestamp'].dt.weekday
 df_merged['order_hour']=df_merged['order_purchase_timestamp'].dt.hour
 print(df_merged[['order_purchase_timestamp','order_year','order_month','order_weekday','order_hour']].head())
+
+#Durations & SLA
+#A boolean line with True if is delivered or False if is not
+delivered_mask = (
+    df_merged["order_status"].eq("delivered") & # Returns True onlu oreder status is delivered
+    df_merged["order_delivered_customer_date"].notna() # Returns True onlu oreder status is not NaT
+)
+#I limit even more to the lines that have all the dates you need to calculate the processing time
+valid_proc = (
+    delivered_mask # We check if is delivered so that we dont need to calculate the canseled orders
+    & df_merged["order_delivered_carrier_date"].notna() # We check if there is a date delivered at carrier
+    & df_merged["order_purchase_timestamp"].notna() # We check if there is order date
+)
+#Processing days
+# Here i calculate how many days past that the date that customer did the order until the order delivered at carrier
+df_merged.loc[valid_proc, "processing_days"] = ( # We take only the True values at valid_proc
+    # We calculate the difference and that return a Timedelta.That values are going to be saved at a new column proseccing days only for valid_proc values
+    df_merged.loc[valid_proc, "order_delivered_carrier_date"]- df_merged.loc[valid_proc, "order_purchase_timestamp"]
+).dt.days
