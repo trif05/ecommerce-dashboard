@@ -178,3 +178,13 @@ df_merged.loc[valid_proc, "processing_days"] = ( # We take only the True values 
     # We calculate the difference and that return a Timedelta.That values are going to be saved at a new column proseccing days only for valid_proc values
     df_merged.loc[valid_proc, "order_delivered_carrier_date"]- df_merged.loc[valid_proc, "order_purchase_timestamp"]
 ).dt.days
+
+#Shipping days
+ship_mask = (
+    df_merged["order_status"].eq("delivered") &
+    df_merged["order_delivered_carrier_date"].notna() &
+    df_merged["order_delivered_customer_date"].notna()
+)
+df_merged.loc[ship_mask,"shipping_days"]= (
+    df_merged.loc[ship_mask,"order_delivered_customer_date"] - df_merged.loc[ship_mask,"order_delivered_carrier_date"]
+).dt.days
