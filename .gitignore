@@ -6,10 +6,9 @@ __pycache__/
 *.py[cod]
 
 # Data files
-data/
-*.csv
-*.xlsx
-*.json
+data/*
+!data/.gitkeep
+out/
 
 # Virtual environments
 venv/
@@ -19,3 +18,7 @@ venv/
 #Test files 
 notebooks/test.py
 vocab.txt
+
+
+#VsCode
+.vscode/
