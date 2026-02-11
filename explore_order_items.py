@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from paths import DATA, OUT
 
 # =============================================================================
 # ORDER ITEMS ANALYSIS - REVENUE & PRODUCT EXPLORATION
@@ -11,7 +12,7 @@ print("ORDER ITEMS DATASET EXPLORATION")
 print("=" * 60)
 
 # Load the order items dataset / Διαβαζει το csv σε pandas dataframe
-df = pd.read_csv(r"C:\Users\Pc User\Desktop\projects\Working_On\ecommerce-dashboard\data\olist_order_items_dataset.csv")
+df = pd.read_csv(DATA / "olist_order_items_dataset.csv")
 
 # Data shape & structure
 print(f"Total number of order items: {df.shape[0]:,}")

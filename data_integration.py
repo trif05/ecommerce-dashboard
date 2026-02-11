@@ -46,10 +46,12 @@ def load_items():
 
 orders = load_orders()
 items  = load_items()
+
 df_merged = orders.merge(items, on="order_id", how="inner", validate="one_to_many")
 df_merged.to_csv(OUT / "integrated_data.csv", index=False)
 print("DATA folder:", DATA.resolve())
 print("OUT folder:", OUT.resolve())
+
 #-----------ASSERTIONS SECTION-----------------------
 #Columns that must exist
 assert "order_id" in orders.columns , "orders: missing 'order_id"

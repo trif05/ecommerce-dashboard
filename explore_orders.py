@@ -1,12 +1,13 @@
 import pandas as pd
 import numpy as np
+from paths import DATA, OUT
 
 # =============================================================================
 # E-COMMERCE DASHBOARD - DATA EXPLORATION
 # =============================================================================
 
 # Load Brazilian E-commerce dataset
-df = pd.read_csv(r"C:\Users\Pc User\Desktop\projects\Working_On\ecommerce-dashboard\data\olist_orders_dataset.csv")
+df = pd.read_csv(DATA / "olist_orders_dataset.csv")
 print("=" * 60)
 print("BASIC INFORMATION FOR DATASET")
 print("=" * 60)
