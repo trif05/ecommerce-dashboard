@@ -18,3 +18,4 @@ venv/
 
 #Test files 
 notebooks/test.py
+vocab.txt
