@@ -11,7 +11,9 @@ data/*
 out/
 
 # Virtual environments
+.venv/
 venv/
+venv_test/
 .env
 
 
@@ -24,6 +26,5 @@ vocab.txt
 # Azure Functions local secrets
 functions/**/local.settings.json
 
-#Vsocde
-.python_packages
-venv_test
+# VS Code (keep optional safe files, ignore personal settings)
+.vscode/settings.json
