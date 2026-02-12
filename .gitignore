@@ -20,5 +20,10 @@ notebooks/test.py
 vocab.txt
 
 
-#VsCode
-.vscode/
+
+# Azure Functions local secrets
+functions/**/local.settings.json
+
+#Vsocde
+.python_packages
+venv_test
