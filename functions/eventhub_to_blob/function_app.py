@@ -32,21 +32,28 @@ def eventhub_to_blob(event: func.EventHubEvent):
         #Log the order_id if it exists in the JSON data
         daily_date=datetime.utcnow()
         year=daily_date.year
-        month=str(daily_date.month.zfill(2))
-        day=str(daily_date.day.zfill(2))
+        month=str(daily_date.month).zfill(2)
+        day=str(daily_date.day).zfill(2)
         unique_id=str(uuid.uuid4())#Generate a unique identifier for the blob name
-        blob_name=f"Orders/{year}/{month}/{unique_id}.json"
+        blob_name=f"orders/{year}/{month}/{day}/{unique_id}.json"
         #We take the connection string for Azure Blob Storage from the environment variable AzureWebJobsStorage,
         #which is typically used in Azure Functions to store data and manage state.
         connection_string=os.environ.get("AzureWebJobsStorage")
         if connection_string is None:
-            logging.info("Missing")
+            logging.info("Missing AzureWebJobsStorage")
             return
-
-        logging.info("Found")
+        logging.info("Found AzureWebJobsStorage")
+        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+        container_client = blob_service_client.get_container_client("bronze")
+        container_client.upload_blob(
+            name=blob_name,
+            data=body,
+            overwrite=False #So that one event does not step on another
+        )
+        logging.info(f"Uploaded blob: {blob_name}")
         logging.info(f"Parsed order_id:{data.get('order_id')}")
-
+        
     except Exception as e:
         logging.error(f"JSON parse faild: {e}")
-    logging.info(f"Event body: {body}")
+        return
 
