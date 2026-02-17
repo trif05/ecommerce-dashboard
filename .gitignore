@@ -8,8 +8,10 @@ __pycache__/
 # Data files
 data/*
 !data/.gitkeep
-out/
+out/*
 *.csv
+
+
 # Virtual environments
 .venv/
 venv/
