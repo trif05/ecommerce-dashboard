@@ -9,7 +9,7 @@ __pycache__/
 data/*
 !data/.gitkeep
 out/
-
+*.csv
 # Virtual environments
 .venv/
 venv/

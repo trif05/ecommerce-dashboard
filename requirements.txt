@@ -1,3 +1,4 @@
 pandas
 numpy
 azure-storage-blob
+azure-eventhub
