@@ -1,6 +1,10 @@
 from pathlib import Path
 import pandas as pd
 import numpy as np
+# Add parent directory to system path so we can import the paths module (data & output folders)import sys
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from paths import DATA, OUT
 # =============================================================================
 # DATA INTEGRATION & ANALYSIS - ORDER ITEMS ANALYSIS
@@ -85,7 +89,6 @@ print(columns_names)
 print("\nMISSING VALUES ANALYSIS")
 missing_values=df_merged.isnull().sum()
 print(missing_values)
-
 
 #COMPARE THE DATASET SIZES BEFORE/AFTER MERGE
 print("\nJOIN QUALITY METRICS")
