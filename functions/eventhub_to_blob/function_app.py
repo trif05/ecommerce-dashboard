@@ -28,14 +28,15 @@ def eventhub_to_blob(event: func.EventHubEvent):
     body = event.get_body().decode("utf-8")#It returns bytes, so we need to decode it to a string!!!
     try:
         #The goal is to check if the body is a valid JSON
-        data=json.loads(body)#We create a new variable data that it is a dictionary that contains the parsed JSON data
+        data=json.loads(body)#We create a new variable data, that it is a dictionary that contains the parsed JSON data
         #Log the order_id if it exists in the JSON data
+        #Partitioned path
         daily_date=datetime.utcnow()
         year=daily_date.year
         month=str(daily_date.month).zfill(2)
         day=str(daily_date.day).zfill(2)
         unique_id=str(uuid.uuid4())#Generate a unique identifier for the blob name
-        blob_name=f"orders/{year}/{month}/{day}/{unique_id}.json"
+        blob_name=f"orders/{year}/{month}/{day}/{unique_id}.json" #Final path (orders/2026/03/18/abc-123.json)
         #We take the connection string for Azure Blob Storage from the environment variable AzureWebJobsStorage,
         #which is typically used in Azure Functions to store data and manage state.
         connection_string=os.environ.get("AzureWebJobsStorage")

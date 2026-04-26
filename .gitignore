@@ -8,7 +8,7 @@ __pycache__/
 # Data files
 data/*
 !data/.gitkeep
-out/*
+out/
 *.csv
 
 
@@ -30,3 +30,9 @@ functions/**/local.settings.json
 
 # VS Code (keep optional safe files, ignore personal settings)
 .vscode/settings.json
+
+
+#producer
+producer/.env
+producer/.venv/
+producer/__pycache__/
