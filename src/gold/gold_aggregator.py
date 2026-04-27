@@ -32,3 +32,27 @@ def gold_sales_overview(df):
     result["avg_order_value"] = (result["total_revenue"] / result["total_orders"]).round(2)
 
     return result
+
+# Delivery Performance
+# Count the delivery performance by year and month.
+
+def gold_delivery_performance(df):
+    #Filter only delivered orders
+    delivered_df = df[df["order_status"].eq("delivered")]
+
+    result = (
+        delivered_df.groupby(["order_year", "order_month"])
+        .agg(
+            avg_fulfillment_days=("fulfillment_days", "mean"),
+            avg_shipping_days=("shipping_days", "mean"),
+            on_time_rate=("on_time", "mean")
+        )
+        .reset_index()
+    )
+
+    result["avg_fulfillment_days"] = result["avg_fulfillment_days"].round(1)
+    result["avg_shipping_days"]    = result["avg_shipping_days"].round(1)
+    result["on_time_rate"]         = (result["on_time_rate"] * 100).round(1)
+
+    return result
+
