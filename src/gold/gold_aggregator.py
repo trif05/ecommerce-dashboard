@@ -104,6 +104,25 @@ def gold_seller_performance(df,delivered_df):
     return result
 
 
+# Customer Geography
+# Count total orders and revenue by customer state.
+
+def gold_customer_geography(df):
+    result = (
+        df.groupby("customer_state")
+        .agg(
+            total_orders=("order_id", "nunique"),   # unique orders by state
+            total_revenue=("payment_value", "sum")  # total revenue
+        )
+        .reset_index()
+    )
+
+    result["total_revenue"] = result["total_revenue"].round(2)
+
+    # Sorting by highest orders first
+    result = result.sort_values("total_orders", ascending=False).reset_index(drop=True)
+
+    return result
 
 if __name__ == "__main__":
     df = load_silver()
