@@ -56,3 +56,24 @@ def gold_delivery_performance(df):
 
     return result
 
+
+# Top Categories
+# Count total orders and revenue by product category.
+
+def gold_top_categories(df):
+    # We remove nan values from the product_category_name
+    categories_df = df.dropna(subset=["product_category_name"])
+
+    result = (
+        categories_df.groupby("product_category_name")
+        .agg(
+            total_orders=("order_id", "nunique"),   # unique orders
+            total_revenue=("payment_value", "sum")  # total revenue
+        )
+        .reset_index()
+    )
+
+    result["total_revenue"] = result["total_revenue"].round(2)
+    result = result.sort_values("total_revenue", ascending=False).reset_index(drop=True) #Sorting
+
+    return result
