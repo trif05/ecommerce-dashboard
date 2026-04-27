@@ -36,9 +36,8 @@ def gold_sales_overview(df):
 # Delivery Performance
 # Count the delivery performance by year and month.
 
-def gold_delivery_performance(df):
+def gold_delivery_performance(delivered_df):
     #Filter only delivered orders
-    delivered_df = df[df["order_status"].eq("delivered")]
 
     result = (
         delivered_df.groupby(["order_year", "order_month"])
@@ -77,3 +76,35 @@ def gold_top_categories(df):
     result = result.sort_values("total_revenue", ascending=False).reset_index(drop=True) #Sorting
 
     return result
+
+# ===========================================================================
+# Seller Performance
+# Count total orders, revenue, fulfillment days, and on-time rate by seller.
+
+def gold_seller_performance(df,delivered_df):
+
+    result = (
+        delivered_df.groupby(["seller_id", "seller_state"])
+        .agg(
+            total_orders=("order_id", "nunique"),          # unique orders
+            total_revenue=("payment_value", "sum"),        # total revenue
+            avg_fulfillment_days=("fulfillment_days", "mean"),  # avg fulfillment days
+            on_time_rate=("on_time", "mean")               # on-time delivery rate
+        )
+        .reset_index()
+    )
+
+    result["total_revenue"]         = result["total_revenue"].round(2)
+    result["avg_fulfillment_days"]  = result["avg_fulfillment_days"].round(1)
+    result["on_time_rate"]          = (result["on_time_rate"] * 100).round(1)
+
+    # Sorting by highest revenue first
+    result = result.sort_values("total_revenue", ascending=False).reset_index(drop=True)
+
+    return result
+
+
+
+if __name__ == "__main__":
+    df = load_silver()
+    delivered_df = df[df["order_status"].eq("delivered")]
