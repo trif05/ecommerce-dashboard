@@ -77,7 +77,7 @@ def gold_top_categories(df):
 
     return result
 
-# ===========================================================================
+
 # Seller Performance
 # Count total orders, revenue, fulfillment days, and on-time rate by seller.
 
@@ -124,6 +124,36 @@ def gold_customer_geography(df):
 
     return result
 
+
+# SAVE
+# Saving each gold dataset as a separate parquet file in the "gold" folder.
+# It creates the "gold" folder if it doesn't exist and saves each DataFrame with a descriptive name.
+
+def save_gold(datasets: dict):
+    gold_dir = OUT / "gold"
+    gold_dir.mkdir(exist_ok=True)  # File creation if it doesn't exist
+
+    for name, df in datasets.items():
+        output_path = gold_dir / f"{name}.parquet"
+        df.to_parquet(output_path, index=False)
+        print(f"Saved: {output_path} — {df.shape[0]:,} rows x {df.shape[1]} columns")
+
+# Main
+
 if __name__ == "__main__":
+    print("Loading silver...")
     df = load_silver()
     delivered_df = df[df["order_status"].eq("delivered")]
+
+    print("Building gold datasets...")
+    datasets = {
+        "gold_sales_overview":       gold_sales_overview(df),
+        "gold_delivery_performance": gold_delivery_performance(delivered_df),
+        "gold_top_categories":       gold_top_categories(df),
+        "gold_seller_performance":   gold_seller_performance(delivered_df),
+        "gold_customer_geography":   gold_customer_geography(df)
+    }
+
+    print("Saving...")
+    save_gold(datasets)
+    print("Gold layer complete!")
