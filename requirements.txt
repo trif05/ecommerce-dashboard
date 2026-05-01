@@ -3,3 +3,6 @@ numpy
 azure-storage-blob
 azure-eventhub
 pyarrow
+streamlit
+plotly
+requests

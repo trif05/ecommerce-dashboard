@@ -56,7 +56,7 @@ df_merged.to_csv(OUT / "integrated_data.csv", index=False)
 print("DATA folder:", DATA.resolve())
 print("OUT folder:", OUT.resolve())
 
-#-----------ASSERTIONS SECTION-----------------------
+# ASSERTIONS SECTION
 #Columns that must exist
 assert "order_id" in orders.columns , "orders: missing 'order_id"
 assert "order_id" in items.columns , "items: missing 'order_id"
@@ -104,7 +104,7 @@ print(f"Orders lost in merge: {orders_lost}")
 # Items in the starting dataset minus rows in merged dataset
 items_lost = items.shape[0] - df_merged.shape[0]
 print(f"Items lost in merge: {items_lost}")
-#===============================================================================================================
+
 # Revenue coverage analysis / Ανάλυση κάλυψης εσόδων
 print("BUSINESS IMPACT VALIDATION")
 # Calculate the revenue before merge
@@ -119,7 +119,7 @@ print(f"Revenue coverage: {revenue_coverage:.1f}%") # This shows how much of the
 # Customer coverage
 unique_customers_merged = df_merged['customer_id'].nunique() #Avoid counting the duplicate customers
 print(f"Unique customers in merged dataset: {unique_customers_merged:,}")
-#===============================================================================================================
+
 # Order complexity analysis
 print("ORDER RELATIONSHIP ANALYSIS")
 # Items per order distribution

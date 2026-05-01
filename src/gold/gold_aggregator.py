@@ -81,7 +81,7 @@ def gold_top_categories(df):
 # Seller Performance
 # Count total orders, revenue, fulfillment days, and on-time rate by seller.
 
-def gold_seller_performance(df,delivered_df):
+def gold_seller_performance(delivered_df):
 
     result = (
         delivered_df.groupby(["seller_id", "seller_state"])
