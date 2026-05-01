@@ -17,9 +17,16 @@ BR_STATE_CODES = {
     "RS": "BR-RS", "RO": "BR-RO", "RR": "BR-RR", "SC": "BR-SC",
     "SP": "BR-SP", "SE": "BR-SE", "TO": "BR-TO"
 }
+
+# CONFIG
+st.set_page_config(
+    page_title="E-Commerce Dashboard",
+    page_icon="🛒",
+    layout="wide"
+)
+
 # We are loading the gold parquet files
 # @st.cache_data : Stores the data in memory so that it does not reread the files every time the user changes pages.
-
 @st.cache_data
 def load_data():
     gold = OUT / "gold"
@@ -30,26 +37,23 @@ def load_data():
         "sellers":    pd.read_parquet(gold / "gold_seller_performance.parquet"),
         "geography":  pd.read_parquet(gold / "gold_customer_geography.parquet")
     }
-
-# CONFIG
-
-st.set_page_config(
-    page_title="E-Commerce Dashboard",
-    page_icon="🛒",
-    layout="wide"
-)
-
 data = load_data()
 
-
-# SIDEBAR
-# st.sidebar.radio = selection btn
+# Side bar
 
 st.sidebar.title("🛒 E-Commerce")
 page = st.sidebar.radio(
     "Πλοήγηση",
     ["Sales Overview", "Delivery Performance", "Top Categories", "Seller Performance", "Geography"]
 )
+# Manual refresh button in sidebar
+refresh_interval = 300
+st.sidebar.divider()
+st.sidebar.caption(f"Auto-refreshes every 5 minutes")
+if st.sidebar.button("🔄 Refresh Now"):
+    st.cache_data.clear()
+    st.rerun()
+
 
 
 # PAGE 1 — SALES OVERVIEW
