@@ -132,11 +132,22 @@ def merge_datasets(orders, items, customers, payments, products, sellers):
 # and also sent via Event Hub, it appears only once.
 
 def merge_blob_orders(df_silver, df_blob):
-
     if df_blob is None:
         return df_silver
-    
+
     df_blob["order_id"] = df_blob["order_id"].astype("string")
+    
+    # Convert timestamp columns from string to datetime
+    date_cols = [
+        "order_purchase_timestamp",
+        "order_delivered_customer_date",
+        "order_delivered_carrier_date",
+        "order_estimated_delivery_date"
+    ]
+    for col in date_cols:
+        if col in df_blob.columns:
+            df_blob[col] = pd.to_datetime(df_blob[col], utc=True).dt.tz_localize(None)
+
     common_cols = [col for col in df_blob.columns if col in df_silver.columns]
     df_combined = pd.concat([df_silver, df_blob[common_cols]], ignore_index=True)
     df_combined = df_combined.drop_duplicates(subset=["order_id"])

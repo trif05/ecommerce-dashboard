@@ -1,11 +1,13 @@
 import sys
 from pathlib import Path
+from streamlit_autorefresh import st_autorefresh
 import plotly.express as px
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pandas as pd
 import streamlit as st
 from paths import OUT
 import requests
+import time
 
 # Mapping from Brazilian state codes to ISO-3166-2 codes for the choropleth map
 BR_STATE_CODES = {
@@ -25,9 +27,11 @@ st.set_page_config(
     layout="wide"
 )
 
+st_autorefresh(interval=40000, key="autorefresh")
+
 # We are loading the gold parquet files
 # @st.cache_data : Stores the data in memory so that it does not reread the files every time the user changes pages.
-@st.cache_data
+@st.cache_data(ttl=40)
 def load_data():
     gold = OUT / "gold"
     return {
@@ -46,13 +50,7 @@ page = st.sidebar.radio(
     "Πλοήγηση",
     ["Sales Overview", "Delivery Performance", "Top Categories", "Seller Performance", "Geography"]
 )
-# Manual refresh button in sidebar
-refresh_interval = 300
-st.sidebar.divider()
-st.sidebar.caption(f"Auto-refreshes every 5 minutes")
-if st.sidebar.button("🔄 Refresh Now"):
-    st.cache_data.clear()
-    st.rerun()
+
 
 
 
@@ -360,3 +358,10 @@ elif page == "Geography":
 
     fig_map.update_geos(fitbounds="locations", visible=False)
     st.plotly_chart(fig_map, use_container_width=True)
+
+refresh_interval = 300
+st.sidebar.divider()
+st.sidebar.caption("Auto-refreshes every 40 seconds")
+if st.sidebar.button("🔄 Refresh Now"):
+    st.cache_data.clear()
+    st.rerun()
