@@ -62,7 +62,6 @@ ecommerce-dashboard/
 `send_orders.py` reads orders from the Olist dataset and sends them one by one to Azure Event Hub, simulating a live e-commerce stream. An Azure Function picks up each event and stores it as a JSON file in Azure Blob Storage under `bronze/orders/year/month/day/`.
 
 ![Bronze Layer](docs/images/bronze_layer.png)
-![Azure Function](docs/images/func_ecom_de_dev.png)
 
 **Silver Layer**
 
