@@ -5,10 +5,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from paths import DATA, OUT
 
-# =============================================================================
-# E-COMMERCE DASHBOARD - DATA EXPLORATION
-# =============================================================================
-
 # Load Brazilian E-commerce dataset
 df = pd.read_csv(DATA / "olist_orders_dataset.csv")
 print("=" * 60)
@@ -16,7 +12,7 @@ print("BASIC INFORMATION FOR DATASET")
 print("=" * 60)
 
 # Basic dataset information
-print(f"Total orders: {df.shape[0]:,}")  # :, adds commas for readability
+print(f"Total orders: {df.shape[0]:,}")
 print(f"Number of columns: {df.shape[1]}")
 
 # Preview of first 5 rows
@@ -103,7 +99,7 @@ for col in [
     "order_delivered_customer_date",
     "order_estimated_delivery_date",
 ]:
-    df[col] = pd.to_datetime(df[col], errors="coerce")  # NaT if parsing fails
+    df[col] = pd.to_datetime(df[col], errors="coerce")
 
 # Core durations (to days)
 df["processing_days"]  = (df["order_delivered_carrier_date"] - df["order_purchase_timestamp"]).dt.days
@@ -112,7 +108,7 @@ df["fulfillment_days"] = (df["order_delivered_customer_date"] - df["order_purcha
 
 # SLA: promised vs actual
 df["sla_diff_days"] = (df["order_delivered_customer_date"] - df["order_estimated_delivery_date"]).dt.days
-df["on_time"] = df["sla_diff_days"] <= 0   # True αν παραδόθηκε στην ώρα του ή νωρίτερα
+df["on_time"] = df["sla_diff_days"] <= 0
 
 # KPIs
 delivered_mask = df["order_delivered_customer_date"].notna() # Return True if the order was delivered

@@ -6,9 +6,8 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from paths import DATA, OUT
-# =============================================================================
+
 # DATA INTEGRATION & ANALYSIS - ORDER ITEMS ANALYSIS
-# =============================================================================
 
 # SCHEMA TYPES (What types i wait from each file)
 ORDERS_DTYPES = {
@@ -105,7 +104,7 @@ print(f"Orders lost in merge: {orders_lost}")
 items_lost = items.shape[0] - df_merged.shape[0]
 print(f"Items lost in merge: {items_lost}")
 
-# Revenue coverage analysis / Ανάλυση κάλυψης εσόδων
+# Revenue coverage analysis
 print("BUSINESS IMPACT VALIDATION")
 # Calculate the revenue before merge
 original_revenue = items['price'].sum()
@@ -129,10 +128,7 @@ print(f"Max items in single order: {items_per_order.max()}")
 print(f"Orders with 1 item: {(items_per_order == 1).sum():,}")
 print(f"Orders with multiple items: {(items_per_order > 1).sum():,}")
 
-# =============================================================================
 # DATA QUALITY INVESTIGATION & REMEDIATION
-# =============================================================================
-
 print("\n" + "="*60)
 print("INVESTIGATING MISSING ORDERS")
 print("="*60)
@@ -145,12 +141,12 @@ print(f"Orders χωρίς items: {len(orders_without_items)}")
 print("\nSample of missing orders:")
 print(orders_without_items[['order_id', 'order_status', 'order_purchase_timestamp']].head(10))
 
-# Τι status έχουν αυτές οι παραγγελίες;
+# Orders status;
 print("\nStatus breakdown of missing orders:")
 missing_status = orders_without_items['order_status'].value_counts()
 print(missing_status)
 
-# Ποσοστιαία κατανομή
+# Percentage breakdown
 print("\nPercentage breakdown:")
 missing_percentage = (missing_status / len(orders_without_items)) * 100
 for status, percentage in missing_percentage.items():
@@ -166,6 +162,7 @@ df_merged['order_hour']=df_merged['order_purchase_timestamp'].dt.hour
 print(df_merged[['order_purchase_timestamp','order_year','order_month','order_weekday','order_hour']].head())
 
 #Durations & SLA
+# SLA : Service Level Agreement -> Deal between e-commerce and customer for delivery date
 #A boolean line with True if is delivered or False if is not
 delivered_mask = (
     df_merged["order_status"].eq("delivered") & # Returns True onlu oreder status is delivered

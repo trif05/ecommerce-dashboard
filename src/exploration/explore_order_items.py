@@ -5,16 +5,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from paths import DATA, OUT
 
-# =============================================================================
 # ORDER ITEMS ANALYSIS - REVENUE & PRODUCT EXPLORATION
-# =============================================================================
-# (/) after english comments it means that the code is translated to greek for personal understanding.
-
 print("=" * 60)
 print("ORDER ITEMS DATASET EXPLORATION")
 print("=" * 60)
 
-# Load the order items dataset / Διαβαζει το csv σε pandas dataframe
+# Load the order items dataset
 df = pd.read_csv(DATA / "olist_order_items_dataset.csv")
 
 # Data shape & structure
@@ -38,13 +34,13 @@ else:
     print("No duplicate rows found.")
 
 
-#Descriptive statistics for numerical columns(price,freight_value,order_item_id) / Στατιστικά περιγραφής για αριθμητικές στήλες
+#Descriptive statistics for numerical columns(price,freight_value,order_item_id)
 stats=df[['price', 'freight_value', 'order_item_id']].describe()
 print("\nDESCRIPTIVE STATISTICS:")
 print(stats)
 
-# Unique values in order_item_id , product_id. / Μοναδικές τιμές σε order_item_id , product_id.
-# With unique order we can understand how many distinct orders and products are present. / Με τις μοναδικές παραγγελίες μπορούμε να καταλάβουμε πόσες διαφορετικές παραγγελίες και προϊόντα υπάρχουν.
+# Unique values in order_item_id , product_id.
+# With unique order we can understand how many distinct orders and products are present.
 print("\n Order Behavior:")
 unique_orders = df['order_id'].nunique()
 unique_products = df['product_id'].nunique()
@@ -57,14 +53,14 @@ product_popularity = len(df) / unique_products #Product popularity
 print(f"Average items per order: {items_per_order:.2f}")
 print(f"Average sales per product: {product_popularity:.1f}")
 
-# Total revenue and average price per item /revenue = χργηματα που εισεπραξε το marketplace
+# Total revenue and average price per item
 total_revenue = df['price'].sum()
 print(f"Total Revenue: {total_revenue:,}€")
 # Average Order Value / Mo Αξία Παραγγελίας
 aov= total_revenue / unique_orders
 print(f"Average Order Value (AOV): {aov:.2f}€")
 
-# Top 10 best selling products /Ascending = Ανερχομενη σειρα/
+# Top 10 best selling products
 top_products = df.groupby('product_id')['price'].count().sort_values(ascending=False).head(10)
 print("TOP 10 BEST SELLING PRODUCTS:")
 print(top_products)
@@ -153,7 +149,7 @@ outlier_products = df[df["price"] > 3 * df["price"].mean()]# Products with price
 print("\nProducts with price > 3x mean:")
 print(outlier_products)
 
-# Freight value outliers / Ανιχνευση Ακραίων Τιμών Μεταφορικών
+# Freight value outliers
 freight_outliers = df[df["freight_value"] > 3 * df["freight_value"].mean()]
 print("\nFreight value outliers:")
 print(freight_outliers)
