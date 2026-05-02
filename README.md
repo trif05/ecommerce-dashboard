@@ -80,7 +80,12 @@ ecommerce-dashboard/
 
 **Live Pipeline**
 
-`send_orders.py` also runs the silver and gold pipeline automatically in the background every 30 seconds. While the pipeline is running, order sending is paused and resumes when it completes.
+**Live Pipeline**
+
+`send_orders.py` generates new fake orders with random data every 2 seconds and sends them to Azure Event Hub. Each order gets a unique ID and contains realistic fields: customer state, product category, seller, payment type, price, and delivery dates — all picked randomly from real values found in the Olist dataset.
+
+Every 30 seconds the pipeline pauses order sending, runs `silver_transformer.py` and `gold_aggregator.py` to process the new data, then resumes. The Streamlit dashboard auto-refreshes every 40 seconds so the charts and KPIs update automatically without any manual action.
+
 ![Terminal](docs/images/terminal_send_orders.png)
 ---
 
